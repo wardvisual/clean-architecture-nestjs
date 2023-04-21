@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { LoggerService } from '../../logger/logger.service';
 
-interface IError {
+interface Errorable {
   message: string;
   code_error: string;
 }
@@ -26,7 +26,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         : HttpStatus.INTERNAL_SERVER_ERROR;
     const message =
       exception instanceof HttpException
-        ? (exception.getResponse() as IError)
+        ? (exception.getResponse() as Errorable)
         : { message: (exception as Error).message, code_error: null };
 
     const responseData = {
@@ -43,7 +43,7 @@ export class AllExceptionFilter implements ExceptionFilter {
 
   private logMessage(
     request: any,
-    message: IError,
+    message: Errorable,
     status: number,
     exception: any,
   ) {
